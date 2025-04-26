@@ -1,14 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { useDeleteArticleMutation } from "./usersApi";
 import { AlertDeleteButton } from "@/components/AlertDeleteButton";
 import { IUser } from "./userColumns";
 
 export function UserActionButton({ data }: { data: IUser }) {
-  const [deleteArticle] = useDeleteArticleMutation();
-
-  const handleDelete = async () => {
-    await deleteArticle(data._id);
-  };
+  const handleDelete = async () => {};
 
   return (
     <div className="flex gap-2">

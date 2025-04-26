@@ -1,54 +1,171 @@
-# React + TypeScript + Vite
+# Free Shopps
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Free Shopps is a **React + TypeScript + Vite** project designed to provide a modern and efficient development environment. It includes a minimal setup for React with hot module replacement (HMR), TypeScript support, and an extensible ESLint configuration.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+- **React + TypeScript**: Build scalable and type-safe React applications.
+- **Vite**: Lightning-fast development server and build tool.
+- **Hot Module Replacement (HMR)**: Instant updates during development.
+- **ESLint Integration**: Pre-configured linting rules for clean and consistent code.
+- **Modular Directory Structure**: Organized for scalability and maintainability.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
+## 🌐 Project Structure
+
+```bash
+free-shopps/
+├── .gitignore                 # Files and directories to ignore in Git
+├── components.json             # Component metadata (if applicable)
+├── eslint.config.js            # ESLint configuration
+├── index.html                  # Main HTML file
+├── package.json                # Project dependencies and scripts
+├── pnpm-lock.yaml              # Lockfile for package versions
+├── README.md                   # Project documentation
+├── testdisk.log                # Log file (if applicable)
+├── tsconfig.app.json           # TypeScript configuration for the app
+├── tsconfig.json               # Base TypeScript configuration
+├── tsconfig.node.json          # TypeScript configuration for Node.js
+├── vite.config.ts              # Vite configuration
+├── public/                     # Static assets
+│   └── ...
+├── src/                        # Source code
+│   ├── App.tsx                  # Main application component
+│   ├── index.css                # Global styles
+│   ├── main.tsx                 # Application entry point
+│   ├── providers.tsx            # Context providers
+│   ├── vite-env.d.ts            # Vite environment types
+│   ├── assets/                  # Static assets (images, icons, etc.)
+│   │   ├── bg-vector.svg
+│   │   ├── logo.png
+│   ├── components/              # Reusable UI components
+│   │   ├── AlertDeleteButton.tsx
+│   │   ├── AppSidebar.tsx
+│   │   ├── DataTable.tsx
+│   │   ├── DataTablePagination.tsx
+│   │   ├── Header.tsx
+│   │   ├── NavMain.tsx
+│   │   └── ...
+│   ├── constants/               # Application constants
+│   │   ├── index.ts
+│   │   └── ...
+│   ├── features/                # Feature-specific modules
+│   ├── hooks/                   # Custom React hooks
+│   ├── lib/                     # Utility libraries
+│   ├── pages/                   # Application pages
+│   ├── services/                # API services and integrations
+│   ├── store/                   # State management
+│   └── utils/                   # Utility functions
+```
+
+---
+
+## 🔄 Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v16 or higher recommended)
+- [pnpm](https://pnpm.io/) (preferred package manager)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/free-shopps.git
+   cd free-shopps
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   pnpm install
+   ```
+
+### Development
+
+Start the development server:
+
+```bash
+pnpm dev
+```
+
+The application will be available at **http://localhost:5173**.
+
+### Build
+
+To create a production build:
+
+```bash
+pnpm build
+```
+
+The build output will be in the `dist/` directory.
+
+### Linting
+
+Run ESLint to check for code quality issues:
+
+```bash
+pnpm lint
+```
+
+---
+
+## 📚 Expanding the ESLint Configuration
+
+This project uses a pre-configured ESLint setup. You can expand it by enabling type-aware lint rules or adding plugins for React-specific rules.
+
+### Type-Aware Rules
+
+```ts
 export default tseslint.config({
   extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
     ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
     ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
     ...tseslint.configs.stylisticTypeChecked,
   ],
   languageOptions: {
-    // other options...
     parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
       tsconfigRootDir: import.meta.dirname,
     },
   },
-})
+});
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### React-Specific Plugins
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```ts
+import reactX from "eslint-plugin-react-x";
+import reactDom from "eslint-plugin-react-dom";
 
 export default tseslint.config({
   plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
+    "react-x": reactX,
+    "react-dom": reactDom,
   },
   rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
+    ...reactX.configs["recommended-typescript"].rules,
     ...reactDom.configs.recommended.rules,
   },
-})
+});
 ```
+
+---
+
+## 💍 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+## 📅 Acknowledgments
+
+- [Vite](https://vitejs.dev/)
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [ESLint](https://eslint.org/)

@@ -5,6 +5,7 @@ import { HomePage } from "./pages/Home";
 import { Header } from "./components/Header";
 import { Route, Routes } from "react-router";
 import { ArticlePage } from "./pages/Article";
+import { Thankyou } from "./pages/Thankyou";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/article" element={<ArticlePage />} />
+              <Route path="*" element={<Thankyou />} />
             </Routes>
           </div>
         </main>

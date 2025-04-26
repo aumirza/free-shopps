@@ -1,24 +1,20 @@
-import { useState } from 'react'
+import { Providers } from "./providers";
+import { AppSidebar } from "./components/AppSidebar";
+import { SidebarInset } from "./components/ui/sidebar";
+import { Header } from "./components/Header";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Providers>
+      <AppSidebar />
+      <SidebarInset>
+        <main>
+          <Header />
+          <div className="p-5 bg-accent"></div>
+        </main>
+      </SidebarInset>
+    </Providers>
+  );
 }
 
-export default App
+export default App;

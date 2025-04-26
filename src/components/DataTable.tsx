@@ -62,8 +62,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-3">
-      <Card className="py-0">
+    <div className="flex-grow flex flex-col gap-2">
+      <Card className="flex-grow py-0">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

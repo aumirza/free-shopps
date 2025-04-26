@@ -98,14 +98,14 @@ const navMainData = [
     icon: FileQuestionIcon,
   },
   {
-    title: "User Management",
-    url: "users",
-    icon: UserPenIcon,
-  },
-  {
     title: "Order",
     url: "order",
     icon: BoxIcon,
+  },
+  {
+    title: "User Management",
+    url: "users",
+    icon: UserPenIcon,
   },
   {
     title: "Settings",

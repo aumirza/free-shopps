@@ -1,9 +1,15 @@
 import * as React from "react";
 import {
+  BoxIcon,
+  BriefcaseBusinessIcon,
+  FileQuestionIcon,
   LayoutDashboardIcon,
+  MapIcon,
   NewspaperIcon,
   RefreshCcwIcon,
+  SettingsIcon,
   StickyNoteIcon,
+  UserPenIcon,
 } from "lucide-react";
 
 import { NavMain } from "@/components/NavMain";
@@ -61,6 +67,50 @@ const navMainData = [
         url: "/blog",
       },
     ],
+  },
+  {
+    title: "Career",
+    icon: BriefcaseBusinessIcon,
+    url: "#",
+    items: [
+      {
+        title: "Career",
+        url: "/career",
+      },
+      {
+        title: "Career Openings",
+        url: "/career/openings",
+      },
+      {
+        title: "career Openings category",
+        url: "/career/category",
+      },
+    ],
+  },
+  {
+    title: "Country, State & City",
+    icon: MapIcon,
+    url: "map",
+  },
+  {
+    title: "Faqs",
+    url: "faqs",
+    icon: FileQuestionIcon,
+  },
+  {
+    title: "User Management",
+    url: "users",
+    icon: UserPenIcon,
+  },
+  {
+    title: "Order",
+    url: "order",
+    icon: BoxIcon,
+  },
+  {
+    title: "Settings",
+    url: "setting",
+    icon: SettingsIcon,
   },
 ];
 

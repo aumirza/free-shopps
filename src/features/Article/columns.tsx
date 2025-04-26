@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
+import AlertDeleteButton from "./AlertDeleteButton";
 
 // schema of article
 // "_id": "6805f60966970c4d387cec1f",
@@ -52,7 +53,7 @@ export const articleColumns: ColumnDef<Article>[] = [
       <img
         src={row.original.image}
         alt={row.original.title}
-        className="size-20 object-cover"
+        className="size-20 object-cover rounded"
       />
     ),
   },
@@ -82,14 +83,7 @@ export const articleColumns: ColumnDef<Article>[] = [
         >
           <span>Edit</span>
         </Button>
-        <Button
-          onClick={() => {
-            console.log(row.original._id);
-          }}
-          className="bg-red-100 text-red-500 hover:bg-red-400 hover:text-white"
-        >
-          <span>Delete</span>
-        </Button>
+        <AlertDeleteButton id={row.original._id} title={row.original.title} />
       </div>
     ),
   },

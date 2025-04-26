@@ -1,9 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { AlertDeleteButton } from "./AlertDeleteButton";
+import { ArticleActionButton } from "./ArticleActionButton";
 
 // schema of article
 // "_id": "6805f60966970c4d387cec1f",
@@ -15,7 +14,7 @@ import { AlertDeleteButton } from "./AlertDeleteButton";
 // "updatedAt": "2025-04-26T04:55:03.966Z",
 // "__v": 0
 
-export type Article = {
+export type IArticle = {
   _id: string;
   title: string;
   description: string;
@@ -26,7 +25,7 @@ export type Article = {
   __v: number;
 };
 
-export const articleColumns: ColumnDef<Article>[] = [
+export const articleColumns: ColumnDef<IArticle>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -73,18 +72,6 @@ export const articleColumns: ColumnDef<Article>[] = [
   },
   {
     header: "Operations",
-    cell: ({ row }) => (
-      <div className="flex gap-2">
-        <Button
-          onClick={() => {
-            console.log(row.original._id);
-          }}
-          className="bg-blue-100 text-blue-500 hover:bg-blue-400 hover:text-white"
-        >
-          <span>Edit</span>
-        </Button>
-        <AlertDeleteButton id={row.original._id} title={row.original.title} />
-      </div>
-    ),
+    cell: ({ row }) => <ArticleActionButton data={row.original} />,
   },
 ];

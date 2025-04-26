@@ -10,21 +10,22 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useDeleteArticleMutation } from "./articlesApi";
 import { toast } from "sonner";
 
 export function AlertDeleteButton({
   id,
   title,
+  description,
+  onDelete,
 }: {
   id: string;
   title: string;
+  description: string;
+  onDelete: (id: string) => Promise<void>;
 }) {
-  const [deleteArticle] = useDeleteArticleMutation();
-
   const handleDelete = async () => {
     try {
-      await deleteArticle(id).unwrap();
+      await onDelete(id);
       toast.success("Article deleted successfully");
     } catch (error) {
       console.log(error);
@@ -43,7 +44,7 @@ export function AlertDeleteButton({
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will permanently delete the
-            article. "{title}"
+            {description}. "{title}"
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -9,7 +9,24 @@ export const articlesApi = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    createArticle: builder.mutation({
+      query: (data) => ({
+        url: API_ENDPOINTS.createArticle,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    deleteArticle: builder.mutation({
+      query: (id) => ({
+        url: `${API_ENDPOINTS.deleteArticle}/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
-export const { useGetArticlesQuery } = articlesApi;
+export const {
+  useGetArticlesQuery,
+  useCreateArticleMutation,
+  useDeleteArticleMutation,
+} = articlesApi;

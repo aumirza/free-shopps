@@ -3,4 +3,7 @@ export const API_BASE_URL =
 
 export const API_ENDPOINTS = {
   getArticle: "/Article/getArticle",
+  createArticle: "/Article/createArticle",
+  updateArticle: "/Article/updateArticle{{id}}",
+  deleteArticle: "/Article/deleteArticle/{{id}}",
 };

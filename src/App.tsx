@@ -7,6 +7,7 @@ import { HomePage } from "@/pages/Home";
 import { ArticlePage } from "@/pages/Article";
 import { Thankyou } from "@/pages/Thankyou";
 import bgVector from "@/assets/bg-vector.svg";
+import { UsersPage } from "./pages/Users";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/article" element={<ArticlePage />} />
+                <Route path="/users" element={<UsersPage />} />
                 <Route path="*" element={<Thankyou />} />
               </Routes>
             </div>

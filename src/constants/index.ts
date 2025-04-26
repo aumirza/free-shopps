@@ -6,4 +6,5 @@ export const API_ENDPOINTS = {
   createArticle: "/Article/createArticle",
   updateArticle: "/Article/updateArticle{{id}}",
   deleteArticle: "/Article/deleteArticle/{{id}}",
+  getAllUsers: "/getAllUsers",
 };

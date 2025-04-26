@@ -117,15 +117,13 @@ const navMainData = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <div className="ml-14">
-        <SidebarHeader>
-          <img src={logo} className="size-20" />
-        </SidebarHeader>
-        <SidebarContent>
-          <NavMain items={navMainData} />
-        </SidebarContent>
-        <SidebarRail />
-      </div>
+      <SidebarHeader>
+        <img src={logo} className="size-20" />
+      </SidebarHeader>
+      <SidebarContent>
+        <NavMain items={navMainData} />
+      </SidebarContent>
+      <SidebarRail />
     </Sidebar>
   );
 }

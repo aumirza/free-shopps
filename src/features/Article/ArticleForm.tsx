@@ -22,7 +22,10 @@ import {
 } from "@/components/ui/file-upload";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreateArticleMutation } from "./articlesApi";
+import {
+  useCreateArticleMutation,
+  useUpdateArticleMutation,
+} from "./articlesApi";
 import { MAX_FILE_SIZE_MB } from "@/constants/media";
 import { checkFileType } from "@/utils/checkFileType";
 
@@ -30,18 +33,32 @@ const formSchema = z.object({
   title: z.string().min(1),
   desc: z.string(),
   image: z
-    .instanceof(File)
-    .refine(
-      (file) => file.size < MAX_FILE_SIZE_MB * 1024 * 1024,
-      `Max size is ${MAX_FILE_SIZE_MB} MB.`
-    )
-    .refine((file) => checkFileType(file), "File type is not supported."),
+    .union([z.instanceof(File), z.string()])
+    .refine((file) => {
+      if (typeof file === "string") return true; // Allow string (existing image URL)
+      return file.size < MAX_FILE_SIZE_MB * 1024 * 1024;
+    }, `Max size is ${MAX_FILE_SIZE_MB} MB.`)
+    .refine((file) => {
+      if (typeof file === "string") return true; // Allow string (existing image URL)
+      return checkFileType(file);
+    }, "File type is not supported."),
 });
 
-export function ArticleForm() {
+export function ArticleForm({
+  data,
+  id,
+}: {
+  id?: string;
+  data?: {
+    title: string;
+    description: string;
+    image: string;
+  };
+}) {
   const [files, setFiles] = useState<File[] | null>(null);
 
   const [createArticle] = useCreateArticleMutation();
+  const [updateArticle] = useUpdateArticleMutation();
 
   const dropZoneConfig = {
     maxFiles: 5,
@@ -50,6 +67,10 @@ export function ArticleForm() {
   };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: data ? data.title : "",
+      desc: data ? data.description : "",
+    },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -59,15 +80,25 @@ export function ArticleForm() {
       formData.append("description", values.desc);
       formData.append("image", values.image);
 
-      createArticle(formData)
-        .then(() => {
-          toast.success("Article created successfully");
-          form.reset();
-          setFiles(null);
-        })
-        .catch((err) => {
-          toast.error(err.data.message);
-        });
+      if (id) {
+        updateArticle({ id, data: formData })
+          .then(() => {
+            toast.success("Article updated successfully");
+          })
+          .catch((err) => {
+            toast.error(err.data.message);
+          });
+      } else {
+        createArticle(formData)
+          .then(() => {
+            toast.success("Article created successfully");
+            form.reset();
+            setFiles(null);
+          })
+          .catch((err) => {
+            toast.error(err.data.message);
+          });
+      }
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");

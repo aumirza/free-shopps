@@ -38,7 +38,7 @@ const formSchema = z.object({
     .refine((file) => checkFileType(file), "File type is not supported."),
 });
 
-export default function AddArticleForm() {
+export function ArticleForm() {
   const [files, setFiles] = useState<File[] | null>(null);
 
   const [createArticle] = useCreateArticleMutation();

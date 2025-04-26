@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import AddArticleForm from "@/features/Article/AddArticleForm";
+import { ArticleForm } from "@/features/Article/ArticleForm";
 
 export function ArticlePage() {
   const { data, error } = useGetArticlesQuery("");
@@ -28,7 +28,7 @@ export function ArticlePage() {
               <DialogHeader>
                 <DialogTitle>Article</DialogTitle>
               </DialogHeader>
-              <AddArticleForm />
+              <ArticleForm />
             </DialogContent>
           </Dialog>
 

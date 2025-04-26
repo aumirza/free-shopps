@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useDeleteArticleMutation } from "./articlesApi";
 import { toast } from "sonner";
 
-export default function AlertDeleteButton({
+export function AlertDeleteButton({
   id,
   title,
 }: {

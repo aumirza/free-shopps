@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import AlertDeleteButton from "./AlertDeleteButton";
+import { AlertDeleteButton } from "./AlertDeleteButton";
 
 // schema of article
 // "_id": "6805f60966970c4d387cec1f",

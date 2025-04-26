@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  HomeIcon,
+  LayoutDashboardIcon,
   NewspaperIcon,
   RefreshCcwIcon,
   StickyNoteIcon,
@@ -14,12 +14,14 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
+import logo from "@/assets/logo.png";
+
 // This is sample data.
 const navMainData = [
   {
-    title: "Home",
+    title: "Dashboard",
     url: "/",
-    icon: HomeIcon,
+    icon: LayoutDashboardIcon,
   },
   {
     title: "Article",
@@ -65,11 +67,15 @@ const navMainData = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader></SidebarHeader>
-      <SidebarContent>
-        <NavMain items={navMainData} />
-      </SidebarContent>
-      <SidebarRail />
+      <div className="ml-14">
+        <SidebarHeader>
+          <img src={logo} className="size-20" />
+        </SidebarHeader>
+        <SidebarContent>
+          <NavMain items={navMainData} />
+        </SidebarContent>
+        <SidebarRail />
+      </div>
     </Sidebar>
   );
 }

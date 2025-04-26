@@ -1,25 +1,29 @@
-import { Providers } from "./providers";
-import { AppSidebar } from "./components/AppSidebar";
-import { SidebarInset } from "./components/ui/sidebar";
-import { HomePage } from "./pages/Home";
-import { Header } from "./components/Header";
 import { Route, Routes } from "react-router";
-import { ArticlePage } from "./pages/Article";
-import { Thankyou } from "./pages/Thankyou";
+import { Providers } from "@/providers";
+import { AppSidebar } from "@/components/AppSidebar";
+import { SidebarInset } from "@/components/ui/sidebar";
+import { Header } from "@/components/Header";
+import { HomePage } from "@/pages/Home";
+import { ArticlePage } from "@/pages/Article";
+import { Thankyou } from "@/pages/Thankyou";
+import bgVector from "@/assets/bg-vector.svg";
 
 function App() {
   return (
     <Providers>
       <AppSidebar />
       <SidebarInset>
-        <main>
+        <main className="flex flex-col h-full">
           <Header />
-          <div className="p-5 bg-accent">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/article" element={<ArticlePage />} />
-              <Route path="*" element={<Thankyou />} />
-            </Routes>
+          <div className="flex-grow relative p-5 bg-accent overflow-hidden">
+            <div className="h-full relative z-20">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/article" element={<ArticlePage />} />
+                <Route path="*" element={<Thankyou />} />
+              </Routes>
+            </div>
+            <img src={bgVector} className="absolute inset-0" />
           </div>
         </main>
       </SidebarInset>

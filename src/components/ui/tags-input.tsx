@@ -6,15 +6,7 @@ import { cn } from "@/lib/utils";
 import { X as RemoveIcon } from "lucide-react";
 import React from "react";
 
-/**
- * used for identifying the split char and use will pasting
- */
 const SPLITTER_REGEX = /[\n#?=&\t,./-]+/;
-
-/**
- * used for formatting the pasted element for the correct value format to be added
- */
-
 const FORMATTING_REGEX = /^[^a-zA-Z0-9]*|[^a-zA-Z0-9]*$/g;
 
 interface TagsInputProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -27,7 +19,7 @@ interface TagsInputProps extends React.HTMLAttributes<HTMLDivElement> {
 
 interface TagsInputContextProps {
   value: string[];
-  onValueChange: (value: any) => void;
+  onValueChange: (value: string[]) => void;
   inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
   activeIndex: number;
@@ -39,7 +31,6 @@ const TagInputContext = React.createContext<TagsInputContextProps | null>(null);
 export const TagsInput = React.forwardRef<HTMLDivElement, TagsInputProps>(
   (
     {
-      children,
       value,
       onValueChange,
       placeholder,
@@ -67,16 +58,16 @@ export const TagsInput = React.forwardRef<HTMLDivElement, TagsInputProps>(
           onValueChange([...value, val]);
         }
       },
-      [value]
+      [value, onValueChange, parseMaxItems]
     );
 
-    const RemoveValue = React.useCallback(
+    const removeValue = React.useCallback(
       (val: string) => {
         if (value.includes(val) && value.length > parseMinItems) {
           onValueChange(value.filter((item) => item !== val));
         }
       },
-      [value]
+      [value, onValueChange, parseMinItems]
     );
 
     const handlePaste = React.useCallback(
@@ -87,7 +78,7 @@ export const TagsInput = React.forwardRef<HTMLDivElement, TagsInputProps>(
         tags.forEach((item) => {
           const parsedItem = item.replace(FORMATTING_REGEX, "").trim();
           if (
-            parsedItem.length > 0 &&
+            parsedItem &&
             !newValue.includes(parsedItem) &&
             newValue.length < parseMaxItems
           ) {
@@ -97,7 +88,7 @@ export const TagsInput = React.forwardRef<HTMLDivElement, TagsInputProps>(
         onValueChange(newValue);
         setInputValue("");
       },
-      [value]
+      [value, onValueChange, parseMaxItems]
     );
 
     const handleSelect = React.useCallback(
@@ -107,41 +98,19 @@ export const TagsInput = React.forwardRef<HTMLDivElement, TagsInputProps>(
           target.selectionStart ?? 0,
           target.selectionEnd ?? 0
         );
-
         setSelectedValue(selection);
         setIsValueSelected(selection === inputValue);
       },
       [inputValue]
     );
 
-    // ? suggest : a refactor rather then using a useEffect
-
     React.useEffect(() => {
-      const VerifyDisable = () => {
-        if (value.length - 1 >= parseMinItems) {
-          setDisableButton(false);
-        } else {
-          setDisableButton(true);
-        }
-        if (value.length + 1 <= parseMaxItems) {
-          setDisableInput(false);
-        } else {
-          setDisableInput(true);
-        }
-      };
-      VerifyDisable();
-    }, [value]);
-
-    // ? check: Under build , default option support
-    // * support : for the uncontrolled && controlled ui
-
-    /*  React.useEffect(() => {
-      if (!defaultOptions) return;
-      onValueChange([...value, ...defaultOptions]);
-    }, []); */
+      setDisableButton(value.length <= parseMinItems);
+      setDisableInput(value.length >= parseMaxItems);
+    }, [value.length, parseMinItems, parseMaxItems]);
 
     const handleKeyDown = React.useCallback(
-      async (e: React.KeyboardEvent<HTMLInputElement>) => {
+      (e: React.KeyboardEvent<HTMLInputElement>) => {
         e.stopPropagation();
 
         const moveNext = () => {
@@ -165,66 +134,61 @@ export const TagsInput = React.forwardRef<HTMLDivElement, TagsInputProps>(
               : activeIndex - 1;
           setActiveIndex(newIndex);
         };
-        const target = e.currentTarget;
 
-        // ? Suggest : the multi select should support the same pattern
+        const target = e.currentTarget;
 
         switch (e.key) {
           case "ArrowLeft":
             if (dir === "rtl") {
-              if (value.length > 0 && activeIndex !== -1) {
-                moveNext();
-              }
+              if (value.length > 0 && activeIndex !== -1) moveNext();
             } else {
-              if (value.length > 0 && target.selectionStart === 0) {
-                movePrev();
-              }
+              if (value.length > 0 && target.selectionStart === 0) movePrev();
             }
             break;
-
           case "ArrowRight":
             if (dir === "rtl") {
-              if (value.length > 0 && target.selectionStart === 0) {
-                movePrev();
-              }
+              if (value.length > 0 && target.selectionStart === 0) movePrev();
             } else {
-              if (value.length > 0 && activeIndex !== -1) {
-                moveNext();
-              }
+              if (value.length > 0 && activeIndex !== -1) moveNext();
             }
             break;
-
           case "Backspace":
           case "Delete":
             if (value.length > 0) {
               if (activeIndex !== -1 && activeIndex < value.length) {
-                RemoveValue(value[activeIndex]);
+                removeValue(value[activeIndex]);
                 moveCurrent();
-              } else {
-                if (target.selectionStart === 0) {
-                  if (selectedValue === inputValue || isValueSelected) {
-                    RemoveValue(value[value.length - 1]);
-                  }
+              } else if (target.selectionStart === 0) {
+                if (selectedValue === inputValue || isValueSelected) {
+                  removeValue(value[value.length - 1]);
                 }
               }
             }
             break;
-
           case "Escape":
-            const newIndex = activeIndex === -1 ? value.length - 1 : -1;
-            setActiveIndex(newIndex);
+            setActiveIndex(activeIndex === -1 ? value.length - 1 : -1);
             break;
-
           case "Enter":
-            if (inputValue.trim() !== "") {
+            if (inputValue.trim()) {
               e.preventDefault();
               onValueChangeHandler(inputValue);
               setInputValue("");
             }
             break;
+          default:
+            break;
         }
       },
-      [activeIndex, value, inputValue, RemoveValue]
+      [
+        activeIndex,
+        value,
+        inputValue,
+        removeValue,
+        dir,
+        selectedValue,
+        isValueSelected,
+        onValueChangeHandler,
+      ]
     );
 
     const mousePreventDefault = React.useCallback((e: React.MouseEvent) => {
@@ -255,10 +219,8 @@ export const TagsInput = React.forwardRef<HTMLDivElement, TagsInputProps>(
           ref={ref}
           dir={dir}
           className={cn(
-            "flex items-center flex-wrap gap-1 p-1 rounded-lg bg-background overflow-hidden   ring-1 ring-muted  ",
-            {
-              "focus-within:ring-ring": activeIndex === -1,
-            },
+            "flex items-center flex-wrap gap-1 p-1 rounded-lg bg-background overflow-hidden ring-1 ring-muted",
+            { "focus-within:ring-ring": activeIndex === -1 },
             className
           )}
         >
@@ -271,7 +233,7 @@ export const TagsInput = React.forwardRef<HTMLDivElement, TagsInputProps>(
               className={cn(
                 "relative px-1 rounded flex items-center gap-1 data-[active='true']:ring-2 data-[active='true']:ring-muted-foreground truncate aria-disabled:opacity-50 aria-disabled:cursor-not-allowed"
               )}
-              variant={"secondary"}
+              variant="secondary"
             >
               <span className="text-xs">{item}</span>
               <button
@@ -280,7 +242,7 @@ export const TagsInput = React.forwardRef<HTMLDivElement, TagsInputProps>(
                 aria-roledescription="button to remove option"
                 disabled={disableButton}
                 onMouseDown={mousePreventDefault}
-                onClick={() => RemoveValue(item)}
+                onClick={() => removeValue(item)}
                 className="disabled:cursor-not-allowed"
               >
                 <span className="sr-only">Remove {item} option</span>

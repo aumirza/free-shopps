@@ -8,6 +8,7 @@ import { ArticlePage } from "@/pages/Article";
 import { Thankyou } from "@/pages/Thankyou";
 import bgVector from "@/assets/bg-vector.svg";
 import { UsersPage } from "./pages/Users";
+import { SettingsPage } from "./pages/Settings";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/article" element={<ArticlePage />} />
                 <Route path="/users" element={<UsersPage />} />
+                <Route path="/setting" element={<SettingsPage />} />
                 <Route path="*" element={<Thankyou />} />
               </Routes>
             </div>

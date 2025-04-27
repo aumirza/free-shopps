@@ -8,6 +8,7 @@ export const articlesApi = apiSlice.injectEndpoints({
         url: API_ENDPOINTS.getArticle,
         method: "GET",
       }),
+      providesTags: ["Articles"],
     }),
     createArticle: builder.mutation({
       query: (data) => ({
@@ -15,6 +16,7 @@ export const articlesApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Articles"],
     }),
     updateArticle: builder.mutation({
       query: (data) => ({
@@ -22,12 +24,14 @@ export const articlesApi = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["Articles"],
     }),
     deleteArticle: builder.mutation({
       query: (id) => ({
         url: `${API_ENDPOINTS.deleteArticle}/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Articles"],
     }),
   }),
 });

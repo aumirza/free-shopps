@@ -13,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { CameraIcon, Paperclip } from "lucide-react";
+import { CameraIcon } from "lucide-react";
 import {
   FileInput,
   FileUploader,
@@ -29,24 +29,40 @@ import {
 import { MAX_FILE_SIZE_MB } from "@/constants/media";
 import { checkFileType } from "@/utils/checkFileType";
 
-const formSchema = z.object({
-  title: z.string().min(1),
-  desc: z.string(),
-  image: z
-    .union([z.instanceof(File), z.string()])
-    .refine((file) => {
-      if (typeof file === "string") return true; // Allow string (existing image URL)
-      return file.size < MAX_FILE_SIZE_MB * 1024 * 1024;
-    }, `Max size is ${MAX_FILE_SIZE_MB} MB.`)
-    .refine((file) => {
-      if (typeof file === "string") return true; // Allow string (existing image URL)
-      return checkFileType(file);
-    }, "File type is not supported."),
-});
+const createFormSchema = (id?: string) =>
+  z.object({
+    title: z.string().min(1),
+    desc: z.string(),
+    image: z
+      .any()
+      .refine(
+        (file) => {
+          if (!file && !id) return false; // No file and creating => error
+          if (!file) return true; // No file and editing => okay
+          return file instanceof File; // Must be a File if provided
+        },
+        { message: "Image is required and must be a valid file." }
+      )
+      .refine(
+        (file) => {
+          if (!file || !(file instanceof File)) return true;
+          return file.size < MAX_FILE_SIZE_MB * 1024 * 1024;
+        },
+        { message: `Max size is ${MAX_FILE_SIZE_MB} MB.` }
+      )
+      .refine(
+        (file) => {
+          if (!file || !(file instanceof File)) return true;
+          return checkFileType(file);
+        },
+        { message: "File type is not supported." }
+      ),
+  });
 
 export function ArticleForm({
   data,
   id,
+  onSuccess,
 }: {
   id?: string;
   data?: {
@@ -54,6 +70,7 @@ export function ArticleForm({
     description: string;
     image: string;
   };
+  onSuccess?: () => void;
 }) {
   const [files, setFiles] = useState<File[] | null>(null);
 
@@ -65,6 +82,7 @@ export function ArticleForm({
     maxSize: 1024 * 1024 * 4,
     multiple: true,
   };
+  const formSchema = createFormSchema(id);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,25 +96,28 @@ export function ArticleForm({
       const formData = new FormData();
       formData.append("title", values.title);
       formData.append("description", values.desc);
-      formData.append("image", values.image);
 
       if (id) {
         updateArticle({ id, data: formData })
+          .unwrap()
           .then(() => {
             toast.success("Article updated successfully");
           })
-          .catch((err) => {
-            toast.error(err.data.message);
+          .catch(() => {
+            toast.error("Some error occured on server while updating.");
           });
       } else {
+        formData.append("image", values.image);
         createArticle(formData)
+          .unwrap()
           .then(() => {
             toast.success("Article created successfully");
             form.reset();
             setFiles(null);
+            onSuccess?.();
           })
-          .catch((err) => {
-            toast.error(err.data.message);
+          .catch(() => {
+            toast.error("Some error occured on server while creating.");
           });
       }
     } catch (error) {
@@ -143,8 +164,14 @@ export function ArticleForm({
                       files.length > 0 &&
                       files.map((file, i) => (
                         <FileUploaderItem key={i} index={i}>
-                          <Paperclip className="h-4 w-4 stroke-current" />
-                          <span>{file.name}</span>
+                          <div className="flex items-center gap-2">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={file.name}
+                              className="h-8 w-8 object-cover rounded"
+                            />
+                            <span>{file.name}</span>
+                          </div>
                         </FileUploaderItem>
                       ))}
                   </FileUploaderContent>

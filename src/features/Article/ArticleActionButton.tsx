@@ -14,9 +14,7 @@ import { ArticleForm } from "./ArticleForm";
 export function ArticleActionButton({ data }: { data: IArticle }) {
   const [deleteArticle] = useDeleteArticleMutation();
 
-  const handleDelete = async () => {
-    await deleteArticle(data._id);
-  };
+  const handleDelete = async (id: string) => deleteArticle(id).unwrap();
 
   return (
     <div className="flex gap-2">

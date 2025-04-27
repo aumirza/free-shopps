@@ -21,15 +21,16 @@ export function AlertDeleteButton({
   id: string;
   title: string;
   description: string;
-  onDelete: (id: string) => Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onDelete: (id: string) => Promise<any>;
 }) {
   const handleDelete = async () => {
     try {
       await onDelete(id);
       toast.success("Article deleted successfully");
     } catch (error) {
-      console.log(error);
-      toast.error("Error deleting article");
+      console.error(error);
+      toast.error("Some error occured while deleting.");
     }
   };
   return (

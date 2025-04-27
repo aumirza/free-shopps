@@ -7,8 +7,9 @@ import { HomePage } from "@/pages/Home";
 import { ArticlePage } from "@/pages/Article";
 import { Thankyou } from "@/pages/Thankyou";
 import bgVector from "@/assets/bg-vector.svg";
-import { UsersPage } from "./pages/Users";
-import { SettingsPage } from "./pages/Settings";
+import { UsersPage } from "@/pages/Users";
+import { SettingsPage } from "@/pages/Settings";
+import { Toaster } from "@/components/ui/sonner";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             </div>
             <img src={bgVector} className="absolute inset-0" />
           </div>
+          <Toaster />
         </main>
       </SidebarInset>
     </Providers>

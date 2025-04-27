@@ -10,6 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { capitalizeFirstLetter } from "@/utils/capitalizeFirst";
 import { toast } from "sonner";
 
 export function AlertDeleteButton({
@@ -27,7 +28,9 @@ export function AlertDeleteButton({
   const handleDelete = async () => {
     try {
       await onDelete(id);
-      toast.success("Article deleted successfully");
+      toast.success(
+        `${capitalizeFirstLetter(description)} deleted successfully`
+      );
     } catch (error) {
       console.error(error);
       toast.error("Some error occured while deleting.");

@@ -3,7 +3,9 @@ import { AlertDeleteButton } from "@/components/AlertDeleteButton";
 import { IUser } from "./userColumns";
 
 export function UserActionButton({ data }: { data: IUser }) {
-  const handleDelete = async () => {};
+  const handleDelete = async (): Promise<void> => {
+    return Promise.reject(new Error("User deletion is not allowed"));
+  };
 
   return (
     <div className="flex gap-2">
